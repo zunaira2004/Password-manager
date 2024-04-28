@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -21,11 +22,14 @@ public class MyAdaptor extends RecyclerView.Adapter<MyAdaptor.Viewholder>{
 
     ArrayList<passwordModel> passwords;
     Context context;
+    AppCompatActivity parentActivity;
 
-    MyAdaptor(ArrayList<passwordModel> pass, Context c)
+
+    MyAdaptor(ArrayList<passwordModel> pass, Context c,AppCompatActivity parentActivity)
     {
         passwords=pass;
         context=c;
+        this.parentActivity=parentActivity;
     }
 
 
@@ -39,10 +43,61 @@ public class MyAdaptor extends RecyclerView.Adapter<MyAdaptor.Viewholder>{
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
 
-            // If deletedPassword is empty, bind data from passwords array
             holder.tvName.setText(passwords.get(position).getUsername());
             holder.tvPass.setText(passwords.get(position).getPassword());
             holder.tvUrl.setText(passwords.get(position).getUrl());
+
+        if (!(parentActivity instanceof MainActivity)) {
+            MyDatabaseHelper databaseHelper = new MyDatabaseHelper(context);
+            databaseHelper.open();
+            ArrayList<passwordModel> deletedData = databaseHelper.getAllDeletedData();
+            databaseHelper.close();
+
+            passwords.addAll(deletedData);
+
+            notifyDataSetChanged();
+        }
+        holder.tvName.setText(passwords.get(position).getUsername());
+        holder.tvPass.setText(passwords.get(position).getPassword());
+        holder.tvUrl.setText(passwords.get(position).getUrl());
+
+
+        if (!(parentActivity instanceof MainActivity)) {
+
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    AlertDialog.Builder deleteDialog = new AlertDialog.Builder(context);
+                    deleteDialog.setTitle("Confirmation");
+                    deleteDialog.setMessage("Do you want to delete it or restore it?");
+                    deleteDialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            MyDatabaseHelper database = new MyDatabaseHelper(context);
+                            database.open();
+                            int Delete = passwords.get(holder.getAdapterPosition()).getId();
+                            database.deletePasswordDataPermanently(passwords.get(holder.getAdapterPosition()).getId());
+                            database.close();
+
+                            passwords.remove(holder.getAdapterPosition());
+
+                            notifyItemRemoved(holder.getAdapterPosition());
+                            Toast.makeText(context, "Password deleted", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    deleteDialog.setNegativeButton("Restore", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+
+                    return false;
+                }
+            });
+        }
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
         @Override
@@ -59,8 +114,6 @@ public class MyAdaptor extends RecyclerView.Adapter<MyAdaptor.Viewholder>{
 
                     MyDatabaseHelper database = new MyDatabaseHelper(context);
                     database.open();
-                    int idToDelete = passwords.get(holder.getAdapterPosition()).getId();
-                    Log.d("MyAdapter", "Deleting item with ID: " + idToDelete);
                     database.deletePasswordData(passwords.get(holder.getAdapterPosition()).getId());
                     database.close();
 

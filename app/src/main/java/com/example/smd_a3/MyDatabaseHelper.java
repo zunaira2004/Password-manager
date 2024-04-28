@@ -189,6 +189,32 @@ public class MyDatabaseHelper {
             Toast.makeText(context, "Data not deleted", Toast.LENGTH_SHORT).show();
         }
     }
+    public ArrayList<passwordModel> getAllDeletedData() {
+        ArrayList<passwordModel> deletedData = new ArrayList<>();
+
+        String query = "SELECT * FROM " + TABLE_NAME2 + " WHERE " + KEY_DELETED2 + " = ?";
+        Cursor cursor = database.rawQuery(query, new String[]{"true"});
+
+        int idIndex = cursor.getColumnIndex(KEY_ID2);
+        int nameIndex = cursor.getColumnIndex(KEY_NAME2);
+        int passIndex = cursor.getColumnIndex(KEY_PASSWORD2);
+        int urlIndex = cursor.getColumnIndex(KEY_URL2);
+
+        if (cursor.moveToFirst()) {
+            do {
+                passwordModel data = new passwordModel();
+                data.setId(cursor.getInt(idIndex));
+                data.setUsername(cursor.getString(nameIndex));
+                data.setPassword(cursor.getString(passIndex));
+                data.setUrl(cursor.getString(urlIndex));
+
+                deletedData.add(data);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return deletedData;
+    }
 
 
 //    public void deletePasswordData(int id) {

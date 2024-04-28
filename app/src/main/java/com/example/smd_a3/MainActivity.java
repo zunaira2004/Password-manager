@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         database.close();
 
         rvPasswords.setLayoutManager(new LinearLayoutManager(this));
-        myAdaptor=new MyAdaptor(passwords,this);
+        myAdaptor=new MyAdaptor(passwords,this,this);
         rvPasswords.setAdapter(myAdaptor);
     }
 }

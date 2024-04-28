@@ -38,7 +38,7 @@ public class RecycleBin_activity extends AppCompatActivity {
         btnRestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                restorePassword();
             }
         });
 
@@ -69,7 +69,7 @@ public class RecycleBin_activity extends AppCompatActivity {
         database.close();
 
         rvBin.setLayoutManager(new LinearLayoutManager(this));
-        adaptor=new MyAdaptor(binPasswords,this);
+        adaptor=new MyAdaptor(binPasswords,this,this);
         rvBin.setAdapter(adaptor);
     }
     void deletePermanently(){
@@ -78,5 +78,8 @@ public class RecycleBin_activity extends AppCompatActivity {
         database.deletePasswordDataPermanently(userid);
         database.close();
     }
+    void restorePassword()
+    {
 
+    }
 }
