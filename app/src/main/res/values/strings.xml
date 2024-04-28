@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">SMD_A3</string>
+    <string name="register_your_account">Register Your Account</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="re_enter_password">Re-enter Password</string>
+    <string name="email">Email</string>
+    <string name="phone_no">Phone no.</string>
+    <string name="sign_up">Sign up</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account">Don\'t have an account</string>
+    <string name="add_button_for_password">Add button for password</string>
+    <string name="url">Url:</string>
+    <string name="add_new_password">Add New Password</string>
+    <string name="link">Link</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="edit_password">Edit Password</string>
+    <string name="log_out">Log out</string>
+    <string name="more">more</string>
+    <string name="recycle_bin">Recycle bin</string>
+    <string name="restore_data">Restore Data</string>
+    <string name="delete_permanently">Delete Permanently</string>
+</resources>
